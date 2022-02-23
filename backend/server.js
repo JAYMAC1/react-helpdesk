@@ -9,7 +9,7 @@ const app = express()
 
 // add route
 app.get('/', (req, res) => {
-  res.send('hello')
+  res.status(200).json({ message: 'Welcome to the Support Desk API' })
 })
 // set app to listen on port
 app.listen(PORT, () => {
