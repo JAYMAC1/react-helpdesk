@@ -1,0 +1,19 @@
+{
+  "name": "mern-support",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node backend/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/JAYMAC1/react-helpdesk.git"
+  },
+  "author": "James McNeil",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JAYMAC1/react-helpdesk/issues"
+  },
+  "homepage": "https://github.com/JAYMAC1/react-helpdesk#readme"
+}
