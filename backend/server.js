@@ -11,6 +11,8 @@ const app = express()
 app.get('/', (req, res) => {
   res.status(200).json({ message: 'Welcome to the Support Desk API' })
 })
+
+app.use('/api/users', require('./routes/userRoures'))
 // set app to listen on port
 app.listen(PORT, () => {
   console.log(`server running on port: ${PORT}`)
