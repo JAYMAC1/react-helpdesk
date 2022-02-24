@@ -12,7 +12,7 @@ app.get('/', (req, res) => {
   res.status(200).json({ message: 'Welcome to the Support Desk API' })
 })
 
-app.use('/api/users', require('./routes/userRoures'))
+app.use('/api/users', require('./routes/userRoutes'))
 
 // set app to listen on port
 app.listen(PORT, () => {
