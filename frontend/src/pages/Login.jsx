@@ -1,9 +1,17 @@
-import { useState } from 'react'
+// react related packages
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+
+// misc packages
 import { FaSignInAlt } from 'react-icons/fa'
 import { toast } from 'react-toastify'
 
-import { useSelector, useDispatch } from 'react-redux'
-import { login } from '../features/auth/authSlice'
+// custom hook, context, redux components etc
+import { login, reset } from '../features/auth/authSlice'
+
+// customer components and pages
+import Spinner from '../components/Spinner'
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -14,10 +22,23 @@ const Login = () => {
   const { email, password } = formData
 
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
-  const { user, isLoading, message, isSuccess } = useSelector(
+  const { user, isError, message, isSuccess, isLoading } = useSelector(
     (state) => state.auth
   )
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message)
+    }
+    // Redirect when logged in
+    if (isSuccess && user) {
+      navigate('/')
+    }
+    dispatch(reset())
+  }, [isError, message, isSuccess, user, navigate, dispatch])
+
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -32,6 +53,10 @@ const Login = () => {
       password,
     }
     dispatch(login(userData))
+  }
+
+  if (isLoading) {
+    return <Spinner />
   }
 
   return (
