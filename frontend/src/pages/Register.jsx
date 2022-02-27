@@ -10,6 +10,9 @@ import { toast } from 'react-toastify'
 // custom hook, context, redux components etc
 import { register, reset } from '../features/auth/authSlice'
 
+// customer components and pages
+import Spinner from '../components/Spinner'
+
 const Register = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -23,7 +26,7 @@ const Register = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const { user, isLoading, message, isSuccess, isError } = useSelector(
+  const { user, message, isSuccess, isError, isLoading } = useSelector(
     (state) => state.auth
   )
 
@@ -58,6 +61,10 @@ const Register = () => {
       }
       dispatch(register(userData))
     }
+  }
+
+  if (isLoading) {
+    return <Spinner />
   }
 
   return (
