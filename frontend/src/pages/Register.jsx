@@ -33,6 +33,13 @@ const Register = () => {
     if (password.trim() !== password2.trim()) {
       toast.error('Passwords do not match')
       return
+    } else {
+      const userData = {
+        name,
+        email,
+        password,
+      }
+      dispatch(register(userData))
     }
   }
 
