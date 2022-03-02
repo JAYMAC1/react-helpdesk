@@ -11,6 +11,7 @@ import { createTicket, reset } from '../features/tickets/ticketSlice'
 
 // custom pages & components
 import Spinner from '../components/Spinner'
+import BackButton from '../components/BackButton'
 
 const NewTicket = () => {
   const { user } = useSelector((state) => state.auth)
@@ -49,6 +50,7 @@ const NewTicket = () => {
   if (isLoading) <Spinner />
   return (
     <>
+      <BackButton url='/' />
       <section className='heading'>
         <h1>Create New Ticket</h1>
         <p>Please fill out the form below</p>
