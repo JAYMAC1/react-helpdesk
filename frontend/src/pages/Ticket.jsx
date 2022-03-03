@@ -1,40 +1,62 @@
 // react related packages
-import { useEffect } from 'react'
+import { useEffect, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
 // misc packages
+import { toast } from 'react-toastify'
 
 // custom hook, context, redux components etc
 import { getTicket, reset } from '../features/tickets/ticketSlice'
 
 // custom pages & components
 import Spinner from '../components/Spinner'
+import BackButton from '../components/BackButton'
+
 // import BackButton from '../components/BackButton'
 
 const Ticket = () => {
-  const { ticket, isLoading, isSuccess } = useSelector((state) => state.ticket)
+  const { ticket, isLoading, isSuccess, isError, message } = useSelector(
+    (state) => state.ticket
+  )
   const { id } = useParams()
   const dispatch = useDispatch()
 
-  useEffect(() => {
-    return () => {
-      if (isSuccess) {
-        dispatch(reset())
-      }
-    }
-  }, [isSuccess, dispatch])
+  const fetchTicket = useCallback(async () => {
+    await dispatch(getTicket(id))
+  }, [dispatch, id]) // every time id changed, new book will be loaded
 
   useEffect(() => {
-    dispatch(getTicket(id))
-  }, [dispatch, id])
+    if (isError) {
+      toast.error(message)
+    }
+
+    fetchTicket()
+  }, [isError, message, fetchTicket])
 
   if (isLoading) <Spinner />
-
+  if (isError) <h3>Something went Wrong</h3>
+  console.log(ticket)
   return (
-    <>
-      <h1>{isSuccess}</h1>
-    </>
+    <div className='ticket-page'>
+      <header className='ticket-header'>
+        <BackButton url='/tickets' />
+        <h2>
+          Ticket ID: {ticket._id}
+          <span className={`status status-${ticket.status}`}>
+            {ticket.status}
+          </span>
+        </h2>
+        <h3>
+          Date Submitted: {new Date(ticket.createdAt).toLocaleString('en-GB')}
+        </h3>
+        <hr />
+        <div className='ticket-desc'>
+          Description of issue
+          <p>{ticket.description}</p>
+        </div>
+      </header>
+    </div>
   )
 }
 
