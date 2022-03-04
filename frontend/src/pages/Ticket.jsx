@@ -16,21 +16,21 @@ import BackButton from '../components/BackButton'
 // import BackButton from '../components/BackButton'
 
 const Ticket = () => {
-  const { ticket, isLoading, isSuccess, isError, message } = useSelector(
+  const { ticket, isError, isLoading, isSuccess, message } = useSelector(
     (state) => state.ticket
   )
   const { id } = useParams()
   const dispatch = useDispatch()
 
-  const fetchTicket = useCallback(async () => {
-    await dispatch(getTicket(id))
-  }, [dispatch, id]) // every time id changed, new book will be loaded
+  const fetchTicket = useCallback(() => {
+    dispatch(getTicket(id))
+    dispatch(getTicket(id))
+  }, [, id])
 
   useEffect(() => {
     if (isError) {
       toast.error(message)
     }
-
     fetchTicket()
   }, [isError, message, fetchTicket])
 
