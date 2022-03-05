@@ -50,7 +50,7 @@ export const getUserTickets = createAsyncThunk(
   }
 )
 
-// Get all user tickets
+// Get user ticket
 export const getTicket = createAsyncThunk(
   'ticket/get',
   async (ticketId, thunkAPI) => {
