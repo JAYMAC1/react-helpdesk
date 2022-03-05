@@ -10,9 +10,7 @@ const createTicket = async (ticketData, token) => {
     },
   }
   const response = await axios.post(API_URL, ticketData, config)
-  // if (response.data) {
-  //   localStorage.setItem('user', JSON.stringify(response.data))
-  // }
+
   return response.data
 }
 
@@ -24,9 +22,6 @@ const getUserTickets = async (token) => {
     },
   }
   const response = await axios.get(API_URL, config)
-  // if (response.data) {
-  //   localStorage.setItem('user', JSON.stringify(response.data))
-  // }
   return response.data
 }
 
@@ -37,7 +32,7 @@ const getTicket = async (ticketId, token) => {
       Authorization: `Bearer ${token}`,
     },
   }
-  const response = await axios.get(`${API_URL}/${ticketId}`, config)
+  const response = await axios.get(API_URL + ticketId, config)
   return response.data
 }
 
