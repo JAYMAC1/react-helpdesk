@@ -22,41 +22,56 @@ const Ticket = () => {
   const { id } = useParams()
   const dispatch = useDispatch()
 
-  const fetchTicket = useCallback(() => {
-    dispatch(getTicket(id))
-    dispatch(getTicket(id))
-  }, [, id])
+  // const fetchTicket = useCallback(async (id) => {
+  //   await dispatch(getTicket(id))
+  // }, [])
+
+  // useEffect(() => {
+  //   fetchTicket(id)
+  // }, [id])
 
   useEffect(() => {
     if (isError) {
       toast.error(message)
     }
-    fetchTicket()
-  }, [isError, message, fetchTicket])
 
+    dispatch(getTicket(id))
+    // dispatch(getNotes(ticketId))
+    // eslint-disable-next-line
+  }, [isError, message, id])
+
+  if (ticket) {
+    console.log('ticket: ', ticket._id)
+  }
   if (isLoading) <Spinner />
+
   if (isError) <h3>Something went Wrong</h3>
-  console.log(ticket)
   return (
-    <div className='ticket-page'>
-      <header className='ticket-header'>
-        <BackButton url='/tickets' />
-        <h2>
-          Ticket ID: {ticket._id}
-          <span className={`status status-${ticket.status}`}>
-            {ticket.status}
-          </span>
-        </h2>
-        <h3>
-          Date Submitted: {new Date(ticket.createdAt).toLocaleString('en-GB')}
-        </h3>
-        <hr />
-        <div className='ticket-desc'>
-          Description of issue
-          <p>{ticket.description}</p>
+    <>
+      {ticket && (
+        <div className='ticket-page'>
+          <header className='ticket-header'>
+            <BackButton url='/tickets' />
+            <h1>Ticket ID: {ticket._id}</h1>
+            <h2>
+              Ticket ID: {ticket._id}
+              <span className={`status status-${ticket.status}`}>
+                {ticket.status}
+              </span>
+            </h2>
+            <h3>
+              Date Submitted:{' '}
+              {new Date(ticket.createdAt).toLocaleString('en-GB')}
+            </h3>
+            <hr />
+            <div className='ticket-desc'>
+              Description of issue
+              <p>{ticket.description}</p>
+            </div>
+          </header>
         </div>
-      </header>
-    </div>
+      )}
+    </>
   )
 }
 
