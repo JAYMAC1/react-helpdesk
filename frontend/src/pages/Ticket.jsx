@@ -19,40 +19,39 @@ const Ticket = () => {
   const { ticket, isError, isLoading, isSuccess, message } = useSelector(
     (state) => state.ticket
   )
+
   const { id } = useParams()
   const dispatch = useDispatch()
 
-  // const fetchTicket = useCallback(async (id) => {
-  //   await dispatch(getTicket(id))
-  // }, [])
-
-  // useEffect(() => {
-  //   fetchTicket(id)
-  // }, [id])
+  const fetchTicket = useCallback(
+    (id) => {
+      dispatch(getTicket(id))
+    },
+    [dispatch]
+  )
 
   useEffect(() => {
     if (isError) {
       toast.error(message)
     }
+    fetchTicket(id)
 
-    dispatch(getTicket(id))
     // dispatch(getNotes(ticketId))
-    // eslint-disable-next-line
-  }, [isError, message, id])
+  }, [isError, message, id, fetchTicket])
 
-  if (ticket) {
-    console.log('ticket: ', ticket._id)
+  if (isLoading) {
+    return <Spinner />
   }
-  if (isLoading) <Spinner />
 
-  if (isError) <h3>Something went Wrong</h3>
+  if (isError) {
+    return <h3>Something went Wrong</h3>
+  }
   return (
     <>
       {ticket && (
         <div className='ticket-page'>
           <header className='ticket-header'>
             <BackButton url='/tickets' />
-            <h1>Ticket ID: {ticket._id}</h1>
             <h2>
               Ticket ID: {ticket._id}
               <span className={`status status-${ticket.status}`}>
@@ -65,7 +64,7 @@ const Ticket = () => {
             </h3>
             <hr />
             <div className='ticket-desc'>
-              Description of issue
+              <h3>Description of Issue</h3>
               <p>{ticket.description}</p>
             </div>
           </header>
