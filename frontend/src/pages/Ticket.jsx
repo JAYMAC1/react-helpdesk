@@ -1,13 +1,13 @@
 // react related packages
 import { useEffect, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 
 // misc packages
 import { toast } from 'react-toastify'
 
 // custom hook, context, redux components etc
-import { getTicket, reset } from '../features/tickets/ticketSlice'
+import { getTicket, closeTicket, reset } from '../features/tickets/ticketSlice'
 
 // custom pages & components
 import Spinner from '../components/Spinner'
@@ -21,6 +21,7 @@ const Ticket = () => {
   )
 
   const { id } = useParams()
+  const navigate = useNavigate()
   const dispatch = useDispatch()
 
   const fetchTicket = useCallback(
@@ -46,6 +47,13 @@ const Ticket = () => {
   if (isError) {
     return <h3>Something went Wrong</h3>
   }
+
+  const onTicketClose = () => {
+    dispatch(closeTicket(id))
+    toast.success('Ticket marked as closed')
+    navigate('/tickets')
+  }
+
   return (
     <>
       {ticket && (
@@ -62,12 +70,20 @@ const Ticket = () => {
               Date Submitted:{' '}
               {new Date(ticket.createdAt).toLocaleString('en-GB')}
             </h3>
+            <h3>Product: {ticket.product}</h3>
             <hr />
             <div className='ticket-desc'>
               <h3>Description of Issue</h3>
               <p>{ticket.description}</p>
             </div>
           </header>
+          {ticket.status !== 'closed' && (
+            <button
+              onClick={onTicketClose}
+              className='btn btn-block btn-danger'>
+              Close Ticket
+            </button>
+          )}
         </div>
       )}
     </>
