@@ -9,8 +9,8 @@ const {
 } = require('../controllers/ticketController')
 
 // re-route into noteRouter
-const noteRouter = require('./userRoutes')
-router.use('/:ticketId/notes', noteRouter)
+const noteRouter = require('./noteRoutes')
+router.use('/:tickedId/notes', noteRouter)
 
 const { protect } = require('../middleware/authMiddleware')
 
