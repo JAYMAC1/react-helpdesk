@@ -1,23 +1,48 @@
 // react related packages
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams, useNavigate } from 'react-router-dom'
 
 // misc packages
 import { toast } from 'react-toastify'
+import Modal from 'react-modal'
+import { FaPlus } from 'react-icons/fa'
 
 // custom hook, context, redux components etc
-import { getTicket, closeTicket, reset } from '../features/tickets/ticketSlice'
+import { getTicket, closeTicket } from '../features/tickets/ticketSlice'
+import { getNotes, reset as notesReset } from '../features/notes/noteSlice'
 
 // custom pages & components
+import NoteItem from '../components/NoteItem'
 import Spinner from '../components/Spinner'
 import BackButton from '../components/BackButton'
 
-// import BackButton from '../components/BackButton'
+// custom styles
+const customStyles = {
+  content: {
+    width: '600px',
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%',
+    position: 'relative',
+  },
+}
+
+Modal.setAppElement('#root')
 
 const Ticket = () => {
+  const [modalIsOpen, setModalIsOpen] = useState(false)
+  const [noteText, setNoteText] = useState('')
+
   const { ticket, isError, isLoading, isSuccess, message } = useSelector(
     (state) => state.ticket
+  )
+
+  const { notes, isLoading: notesIsLoading } = useSelector(
+    (state) => state.note
   )
 
   const { id } = useParams()
@@ -27,6 +52,7 @@ const Ticket = () => {
   const fetchTicket = useCallback(
     (id) => {
       dispatch(getTicket(id))
+      dispatch(getNotes(id))
     },
     [dispatch]
   )
@@ -40,7 +66,7 @@ const Ticket = () => {
     // dispatch(getNotes(ticketId))
   }, [isError, message, id, fetchTicket])
 
-  if (isLoading) {
+  if (isLoading || notesIsLoading) {
     return <Spinner />
   }
 
@@ -54,6 +80,12 @@ const Ticket = () => {
     navigate('/tickets')
   }
 
+  const openModal = () => {
+    setModalIsOpen(true)
+  }
+  const closeModal = () => {
+    setModalIsOpen(false)
+  }
   return (
     <>
       {ticket && (
@@ -76,7 +108,23 @@ const Ticket = () => {
               <h3>Description of Issue</h3>
               <p>{ticket.description}</p>
             </div>
+            <h2>Notes:</h2>
           </header>
+          {ticket.status !== 'closed' && (
+            <button onClick={openModal} className='btn'>
+              {' '}
+              <FaPlus />
+              Add Note
+            </button>
+          )}
+          <Modal
+            isOpen={modalIsOpen}
+            onRequestClose={closeModal}
+            style={customStyles}
+            contentLabel='Add Note'></Modal>
+          {notes.map((note) => (
+            <NoteItem key={note._id} note={note} />
+          ))}
           {ticket.status !== 'closed' && (
             <button
               onClick={onTicketClose}
