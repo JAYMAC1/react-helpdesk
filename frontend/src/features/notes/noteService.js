@@ -4,7 +4,6 @@ const API_URL = '/api/tickets/'
 
 // Get all user tickets
 const getNotes = async (ticketId, token) => {
-  console.log(API_URL + ticketId + '/notes')
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -14,14 +13,20 @@ const getNotes = async (ticketId, token) => {
   return response.data
 }
 
-// create ticket
-const createNote = async (ticketData, token) => {
+// create ticket note
+const createNote = async (noteText, ticketId, token) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   }
-  const response = await axios.post(API_URL, ticketData, config)
+  const response = await axios.post(
+    API_URL + ticketId + '/notes',
+    {
+      text: noteText,
+    },
+    config
+  )
 
   return response.data
 }

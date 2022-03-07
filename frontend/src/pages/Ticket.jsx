@@ -10,7 +10,11 @@ import { FaPlus } from 'react-icons/fa'
 
 // custom hook, context, redux components etc
 import { getTicket, closeTicket } from '../features/tickets/ticketSlice'
-import { getNotes, reset as notesReset } from '../features/notes/noteSlice'
+import {
+  getNotes,
+  createNote,
+  reset as notesReset,
+} from '../features/notes/noteSlice'
 
 // custom pages & components
 import NoteItem from '../components/NoteItem'
@@ -88,9 +92,10 @@ const Ticket = () => {
   }
   const onFormSubmit = (e) => {
     e.preventDefault()
-
-    console.log('Submit Note')
+    console.log(noteText, id)
+    dispatch(createNote(noteText, id))
     closeModal()
+    setNoteText('')
   }
   return (
     <>
