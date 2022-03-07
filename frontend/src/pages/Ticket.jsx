@@ -86,6 +86,12 @@ const Ticket = () => {
   const closeModal = () => {
     setModalIsOpen(false)
   }
+  const onFormSubmit = (e) => {
+    e.preventDefault()
+
+    console.log('Submit Note')
+    closeModal()
+  }
   return (
     <>
       {ticket && (
@@ -121,7 +127,28 @@ const Ticket = () => {
             isOpen={modalIsOpen}
             onRequestClose={closeModal}
             style={customStyles}
-            contentLabel='Add Note'></Modal>
+            contentLabel='Add Note'>
+            <h2>Add Note</h2>
+            <button className='btn-close' onClick={closeModal}>
+              X
+            </button>
+            <form onSubmit={onFormSubmit}>
+              <div className='form-group'>
+                <textarea
+                  name='noteText'
+                  id='noteText'
+                  className='form-control'
+                  placeholder='Note Text'
+                  value={noteText}
+                  onChange={(e) => setNoteText(e.target.value)}></textarea>
+              </div>
+              <div className='form-group'>
+                <button className='btn' type='submit'>
+                  Submit
+                </button>
+              </div>
+            </form>
+          </Modal>
           {notes.map((note) => (
             <NoteItem key={note._id} note={note} />
           ))}
