@@ -92,7 +92,6 @@ const Ticket = () => {
   }
   const onFormSubmit = (e) => {
     e.preventDefault()
-    console.log({ noteText, id })
     dispatch(createNote({ noteText, id }))
     closeModal()
     setNoteText('')
