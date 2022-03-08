@@ -13,8 +13,6 @@ const getNotes = asyncHandler(async (req, res) => {
     res.status(401)
     throw new Error('Nser not found')
   }
-  console.log(req.user.id)
-  console.log(req.params.tickedId)
   const ticket = await Ticket.findById(req.params.tickedId)
   if (ticket.user.toString() !== req.user.id) {
     res.status(401)
