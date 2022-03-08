@@ -13,6 +13,7 @@ const initialState = {
 export const getNotes = createAsyncThunk(
   'note/getAll',
   async (ticketId, thunkAPI) => {
+    console.log('id: ', ticketId)
     try {
       const token = thunkAPI.getState().auth.user.token
       return await noteService.getNotes(ticketId, token)
@@ -30,11 +31,11 @@ export const getNotes = createAsyncThunk(
 )
 
 // // Get all user tickets
+// Create ticket note
 export const createNote = createAsyncThunk(
-  'note/create',
+  'notes/create',
   async ({ noteText, ticketId }, thunkAPI) => {
     try {
-      console.log(noteText)
       const token = thunkAPI.getState().auth.user.token
       return await noteService.createNote(noteText, ticketId, token)
     } catch (error) {
@@ -49,7 +50,6 @@ export const createNote = createAsyncThunk(
     }
   }
 )
-
 // Create ticket note
 // export const createNote = createAsyncThunk(
 //   'note/create',
